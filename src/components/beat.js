@@ -29,6 +29,7 @@ const PUNCH = 'punch';
 const RIDE = 'ride';
 const GUN = 'gun';
 const DRUM = 'drum';
+const SHIELD = 'shield';
 
 const CUT_DIRECTION_VECTORS = {
   up: new THREE.Vector3(0, 1, 0),
@@ -67,12 +68,13 @@ const SIZES = {
   [PUNCH]: 0.35,
   [RIDE]: 0.4,
   [GUN]: 0.42,
-  [DRUM]: 0.40
+  [DRUM]: 0.40,
+  [SHIELD]: 0.48
 };
 
 AFRAME.registerComponent('beat-system', {
   schema: {
-    gameMode: { default: 'classic', oneOf: ['classic', 'punch', 'ride', 'gun', 'drum'] },
+    gameMode: { default: 'classic', oneOf: ['classic', 'punch', 'ride', 'gun', 'drum', 'shield'] },
     hasVR: { default: false },
     inVR: { default: false },
     isLoading: { default: false },
@@ -86,6 +88,7 @@ AFRAME.registerComponent('beat-system', {
     this.fists = [];
     this.guns = [];
     this.drumsticks = [];
+    this.shields = [];
     this.weapons = null;
 
     this.bladeEls = this.el.sceneEl.querySelectorAll('a-entity[blade]');
@@ -93,6 +96,7 @@ AFRAME.registerComponent('beat-system', {
     this.punchEls = this.el.sceneEl.querySelectorAll('a-entity[punch]');
     this.gunEls = this.el.sceneEl.querySelectorAll('a-entity[gun]');
     this.drumstickEls = this.el.sceneEl.querySelectorAll('a-entity[drumstick]');
+    this.shieldEls = this.el.sceneEl.querySelectorAll('a-entity[shield]');
     this.curveEl = document.getElementById('curve');
     this.size = SIZES[this.data.gameMode];
     this.supercurveFollow = null;
@@ -104,6 +108,7 @@ AFRAME.registerComponent('beat-system', {
       if (this.punchEls[i]) { this.fists.push(this.punchEls[i].components.punch); }
       if (this.gunEls[i]) { this.guns.push(this.gunEls[i].components.gun); }
       if (this.drumstickEls[i]) { this.drumsticks.push(this.drumstickEls[i].components.drumstick); }
+      if (this.shieldEls[i]) { this.shields.push(this.shieldEls[i].components.shield); }
     }
 
     this.supercurve = this.curveEl.components.supercurve;
@@ -115,7 +120,7 @@ AFRAME.registerComponent('beat-system', {
 
     if (oldData.isLoading && !this.data.isLoading) {
       this.updateBeatPositioning();
-      this.weaponOffset = this.data.gameMode === CLASSIC ? SWORD_OFFSET * 1.15 : (this.data.gameMode === GUN ? SWORD_OFFSET : PUNCH_OFFSET);
+      this.weaponOffset = this.data.gameMode === CLASSIC ? SWORD_OFFSET * 1.15 : (this.data.gameMode === GUN ? SWORD_OFFSET : (this.data.gameMode === SHIELD ? SWORD_OFFSET : PUNCH_OFFSET));
       this.weaponOffset = this.weaponOffset / this.supercurve.curve.getLength();
     }
 
@@ -128,6 +133,8 @@ AFRAME.registerComponent('beat-system', {
         this.weapons = this.guns;
       } else if (this.data.gameMode === DRUM) {
         this.weapons = this.drumsticks;
+      } else if (this.data.gameMode === SHIELD) {
+        this.weapons = this.shields;
       }
     }
   },
@@ -186,13 +193,28 @@ AFRAME.registerComponent('beat-system', {
     // Mine.
     if (beat.data.type === MINE) {
       if (weapon1.checkCollision(beat)) {
+        if (this.data.gameMode === SHIELD) { weapon1.el.emit('block', false); }
         beat.onHit(weapon1.el);
         return;
       }
       if (weapon2.checkCollision(beat)) {
+        if (this.data.gameMode === SHIELD) { weapon2.el.emit('block', false); }
         beat.onHit(weapon2.el);
       }
       return;
+    }
+
+    // Shield Mode Dual-Shield block check
+    if (this.data.gameMode === SHIELD && (weapon1.isDualShieldActive || weapon2.isDualShieldActive)) {
+      const hit1 = weapon1.checkCollision(beat);
+      const hit2 = weapon2.checkCollision(beat);
+      if (hit1 || hit2) {
+        weapon1.el.emit('block', true);
+        weapon2.el.emit('block', true);
+        beat.onHit(weapon1.el, false);
+        beat.destroyBeat(weapon1.el, true);
+        return;
+      }
     }
 
     // Successful hit, let the beat handle further processing.
@@ -200,6 +222,7 @@ AFRAME.registerComponent('beat-system', {
       ? weapon1
       : weapon2;
     if (correctWeapon.checkCollision(beat)) {
+      if (this.data.gameMode === SHIELD) { correctWeapon.el.emit('block', false); }
       beat.onHit(correctWeapon.el);
       return;
     }
@@ -216,6 +239,7 @@ AFRAME.registerComponent('beat-system', {
         return;
       }
 
+      if (this.data.gameMode === SHIELD) { wrongWeapon.el.emit('block', false); }
       beat.onHit(wrongWeapon.el, true);
       beat.destroyBeat(wrongWeapon.el, false);
     }
@@ -238,7 +262,8 @@ AFRAME.registerComponent('beat-system', {
       [RIDE]: 0.95,
       [PUNCH]: 1.20,
       [GUN]: 1.10,
-      [DRUM]: 0.95
+      [DRUM]: 0.95,
+      [SHIELD]: 1.10
     };
 
     const BOTTOM_HEIGHT_MIN = 0.4;

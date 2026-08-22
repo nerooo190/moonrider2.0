@@ -46,8 +46,8 @@ AFRAME.registerComponent('drums', {
       const type = padEl.dataset.drumType;
       this.pads[type] = {
         el: padEl,
-        surfaceEl: padEl.querySelector('.padSurface'),
-        glowEl: padEl.querySelector('.padGlow'),
+        rimEl: padEl.querySelector('.padRim'),
+        innerEl: padEl.querySelector('.padInnerRing'),
         bbox: new THREE.Box3(),
         worldPos: new THREE.Vector3(),
         hitTime: 0
@@ -67,13 +67,13 @@ AFRAME.registerComponent('drums', {
       const pad = this.pads[key];
       pad.el.object3D.getWorldPosition(pad.worldPos);
       pad.bbox.setFromObject(pad.el.object3D);
-      pad.bbox.expandByScalar(0.08);
+      pad.bbox.expandByScalar(0.12);
 
       if (pad.hitTime > 0) {
         pad.hitTime -= delta;
         if (pad.hitTime <= 0) {
-          if (pad.glowEl) { pad.glowEl.object3D.visible = false; }
-          pad.surfaceEl.object3D.scale.set(1, 1, 1);
+          if (pad.rimEl) { pad.rimEl.object3D.scale.set(1, 1, 1); }
+          if (pad.innerEl) { pad.innerEl.object3D.scale.set(1, 1, 1); }
         }
       }
     }
@@ -84,10 +84,12 @@ AFRAME.registerComponent('drums', {
     if (!pad) { return; }
 
     // Pad visual strike feedback
-    pad.hitTime = 120;
-    if (pad.glowEl) { pad.glowEl.object3D.visible = true; }
-    if (pad.surfaceEl) {
-      pad.surfaceEl.object3D.scale.set(1.18, 1.18, 1.18);
+    pad.hitTime = 140;
+    if (pad.rimEl) {
+      pad.rimEl.object3D.scale.set(1.22, 1.22, 1.22);
+    }
+    if (pad.innerEl) {
+      pad.innerEl.object3D.scale.set(1.35, 1.35, 1.35);
     }
 
     // Play procedural drum sound

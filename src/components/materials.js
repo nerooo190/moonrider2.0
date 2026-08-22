@@ -134,7 +134,9 @@ AFRAME.registerSystem('materials', {
         src: {value: new THREE.TextureLoader().load(document.getElementById('homeShadowImg').src)},
         time: {value: 0}
       },
-      transparent: true
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
     });
     this.textureList.push(this.home.uniforms.src.value);
 

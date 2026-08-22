@@ -25,7 +25,7 @@ AFRAME.registerComponent('weapon-particles', {
     if (oldData.gameMode !== this.data.gameMode) {
       this.el.setAttribute(
         'raycaster__game',
-        (this.data.gameMode === 'punch' || this.data.gameMode === 'gun') ? PUNCH_WALL_RAY : BLADE_WALL_RAY);
+        (this.data.gameMode === 'punch' || this.data.gameMode === 'gun' || this.data.gameMode === 'shield') ? PUNCH_WALL_RAY : BLADE_WALL_RAY);
     }
   },
 
