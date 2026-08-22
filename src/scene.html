@@ -97,12 +97,13 @@
     material="shader: supercurve"
     supercurve
     supercurve-color
+    bind__visible="gameMode !== 'drum'"
     render-order="curve"></a-entity>
 
   <a-entity
     id="tunnelsContainer"
     render-order="curve"
-    bind__visible="isPlaying || isPaused"></a-entity>
+    bind__visible="(isPlaying || isPaused) && gameMode !== 'drum'"></a-entity>
 
   <a-entity
     id="beatContainer"
@@ -111,7 +112,7 @@
 
   <a-entity
     id="wallContainer"
-    bind__visible="isPlaying"></a-entity>
+    bind__visible="isPlaying && gameMode !== 'drum'"></a-entity>
 
   <a-entity id="curveFollowRig"
     bind__curve-follow-rig-reset="isVictory: isVictory"
@@ -125,7 +126,7 @@
     <!-- Beat pieces, explosions, fx, and weapon trail. -->
     <a-entity id="rigContainer"></a-entity>
 
-    <!-- Floating Virtual Drum Kit. -->
+    <!-- Floating Virtual Drum Kit (Pure Glowing Open Neon Rings - 100% Clear View). -->
     <a-entity
       id="floatingDrums"
       drums
@@ -133,44 +134,39 @@
       bind__visible="isPlaying && gameMode === 'drum'"
       position="0 0.05 -0.3">
 
-      <!-- Hi-Hat / Crash Cymbal (Left - Gold) -->
+      <!-- Hi-Hat / Crash Cymbal (Left - Gold Neon Ring) -->
       <a-entity class="drumPad" data-drum-type="hihat" position="-0.65 1.10 -0.85" rotation="32 25 -5">
-        <a-entity class="padRim" geometry="primitive: torus; radius: 0.14; radiusTubular: 0.006" material="color: #ffdd00; shader: flat"></a-entity>
-        <a-entity class="padSurface" geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.138" rotation="-90 0 0" material="color: #ffdd00; shader: flat; opacity: 0.18; transparent: true; side: double"></a-entity>
-        <a-entity class="padGlow" geometry="primitive: circle; radius: 0.14" rotation="-90 0 0" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true; side: double" visible="false"></a-entity>
-        <a-entity mixin="font" text="value: HI-HAT; align: center; width: 0.8; color: #ffdd00" position="0 0.04 -0.16" rotation="-90 0 0"></a-entity>
+        <a-entity class="padRim" geometry="primitive: torus; radius: 0.15; radiusTubular: 0.008" material="color: #ffdd00; shader: flat"></a-entity>
+        <a-entity class="padInnerRing" geometry="primitive: torus; radius: 0.075; radiusTubular: 0.004" material="color: #ffdd00; shader: flat; opacity: 0.6; transparent: true"></a-entity>
+        <a-entity mixin="font" text="value: HI-HAT; align: center; width: 0.9; color: #ffdd00" position="0 0.04 -0.17" rotation="-90 0 0"></a-entity>
       </a-entity>
 
-      <!-- Snare Drum (Center-Left - Pink/Red) -->
+      <!-- Snare Drum (Center-Left - Pink/Red Neon Ring) -->
       <a-entity class="drumPad" data-drum-type="snare" position="-0.28 0.90 -0.80" rotation="28 12 0">
-        <a-entity class="padRim" geometry="primitive: torus; radius: 0.14; radiusTubular: 0.007" material="color: #ff2b75; shader: flat"></a-entity>
-        <a-entity class="padSurface" geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.138" rotation="-90 0 0" material="color: #ff2b75; shader: flat; opacity: 0.20; transparent: true; side: double"></a-entity>
-        <a-entity class="padGlow" geometry="primitive: circle; radius: 0.14" rotation="-90 0 0" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true; side: double" visible="false"></a-entity>
-        <a-entity mixin="font" text="value: SNARE; align: center; width: 0.8; color: #ff2b75" position="0 0.04 -0.16" rotation="-90 0 0"></a-entity>
+        <a-entity class="padRim" geometry="primitive: torus; radius: 0.15; radiusTubular: 0.008" material="color: #ff2b75; shader: flat"></a-entity>
+        <a-entity class="padInnerRing" geometry="primitive: torus; radius: 0.075; radiusTubular: 0.004" material="color: #ff2b75; shader: flat; opacity: 0.6; transparent: true"></a-entity>
+        <a-entity mixin="font" text="value: SNARE; align: center; width: 0.9; color: #ff2b75" position="0 0.04 -0.17" rotation="-90 0 0"></a-entity>
       </a-entity>
 
-      <!-- Kick / Bass Drum Pad (Center-Bottom - Magenta) -->
+      <!-- Kick / Bass Drum Pad (Center-Bottom - Magenta Neon Ring) -->
       <a-entity class="drumPad" data-drum-type="kick" position="0 0.74 -0.80" rotation="32 0 0">
-        <a-entity class="padRim" geometry="primitive: torus; radius: 0.15; radiusTubular: 0.008" material="color: #ff007f; shader: flat"></a-entity>
-        <a-entity class="padSurface" geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.148" rotation="-90 0 0" material="color: #ff007f; shader: flat; opacity: 0.22; transparent: true; side: double"></a-entity>
-        <a-entity class="padGlow" geometry="primitive: circle; radius: 0.15" rotation="-90 0 0" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true; side: double" visible="false"></a-entity>
-        <a-entity mixin="font" text="value: KICK; align: center; width: 0.8; color: #ff007f" position="0 0.04 -0.17" rotation="-90 0 0"></a-entity>
+        <a-entity class="padRim" geometry="primitive: torus; radius: 0.16; radiusTubular: 0.01" material="color: #ff007f; shader: flat"></a-entity>
+        <a-entity class="padInnerRing" geometry="primitive: torus; radius: 0.08; radiusTubular: 0.005" material="color: #ff007f; shader: flat; opacity: 0.6; transparent: true"></a-entity>
+        <a-entity mixin="font" text="value: KICK; align: center; width: 0.9; color: #ff007f" position="0 0.04 -0.18" rotation="-90 0 0"></a-entity>
       </a-entity>
 
-      <!-- High/Mid Tom (Center-Right - Cyan/Blue) -->
+      <!-- High/Mid Tom (Center-Right - Cyan/Blue Neon Ring) -->
       <a-entity class="drumPad" data-drum-type="tom" position="0.28 0.90 -0.80" rotation="28 -12 0">
-        <a-entity class="padRim" geometry="primitive: torus; radius: 0.14; radiusTubular: 0.007" material="color: #00bbff; shader: flat"></a-entity>
-        <a-entity class="padSurface" geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.138" rotation="-90 0 0" material="color: #00bbff; shader: flat; opacity: 0.20; transparent: true; side: double"></a-entity>
-        <a-entity class="padGlow" geometry="primitive: circle; radius: 0.14" rotation="-90 0 0" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true; side: double" visible="false"></a-entity>
-        <a-entity mixin="font" text="value: TOM; align: center; width: 0.8; color: #00bbff" position="0 0.04 -0.16" rotation="-90 0 0"></a-entity>
+        <a-entity class="padRim" geometry="primitive: torus; radius: 0.15; radiusTubular: 0.008" material="color: #00bbff; shader: flat"></a-entity>
+        <a-entity class="padInnerRing" geometry="primitive: torus; radius: 0.075; radiusTubular: 0.004" material="color: #00bbff; shader: flat; opacity: 0.6; transparent: true"></a-entity>
+        <a-entity mixin="font" text="value: TOM; align: center; width: 0.9; color: #00bbff" position="0 0.04 -0.17" rotation="-90 0 0"></a-entity>
       </a-entity>
 
-      <!-- Floor Tom / Ride Cymbal (Right - Turquoise) -->
+      <!-- Floor Tom / Ride Cymbal (Right - Turquoise Neon Ring) -->
       <a-entity class="drumPad" data-drum-type="cymbal" position="0.65 1.10 -0.85" rotation="32 -25 5">
-        <a-entity class="padRim" geometry="primitive: torus; radius: 0.14; radiusTubular: 0.006" material="color: #00f0ff; shader: flat"></a-entity>
-        <a-entity class="padSurface" geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.138" rotation="-90 0 0" material="color: #00f0ff; shader: flat; opacity: 0.18; transparent: true; side: double"></a-entity>
-        <a-entity class="padGlow" geometry="primitive: circle; radius: 0.14" rotation="-90 0 0" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true; side: double" visible="false"></a-entity>
-        <a-entity mixin="font" text="value: CYMBAL; align: center; width: 0.8; color: #00f0ff" position="0 0.04 -0.16" rotation="-90 0 0"></a-entity>
+        <a-entity class="padRim" geometry="primitive: torus; radius: 0.15; radiusTubular: 0.008" material="color: #00f0ff; shader: flat"></a-entity>
+        <a-entity class="padInnerRing" geometry="primitive: torus; radius: 0.075; radiusTubular: 0.004" material="color: #00f0ff; shader: flat; opacity: 0.6; transparent: true"></a-entity>
+        <a-entity mixin="font" text="value: CYMBAL; align: center; width: 0.9; color: #00f0ff" position="0 0.04 -0.17" rotation="-90 0 0"></a-entity>
       </a-entity>
     </a-entity>
 
@@ -213,6 +209,7 @@
           bind__punch="enabled: isPlaying && gameMode === 'punch'"
           bind__gun="enabled: isPlaying && gameMode === 'gun'"
           bind__drumstick="enabled: isPlaying && gameMode === 'drum'"
+          bind__shield="enabled: isPlaying && gameMode === 'shield'"
           bind__raycaster="enabled: {{ hand }}RaycasterActive"
           bind__raycaster__game="enabled: isPlaying && (gameMode === 'classic' || gameMode === 'punch')"
           bind__blade="enabled: isPlaying && gameMode === 'classic'"
@@ -221,6 +218,7 @@
           controller="hand: {{ hand }}"
           gun="hand: {{ hand }}"
           drumstick="hand: {{ hand }}"
+          shield="hand: {{ hand }}"
           data-hand="{{ hand }}"
           haptics="events: mouseenter; dur: 35; force: 0.075"
           haptics__beat="events: beathaptic; dur: 90; force: 0.55"
@@ -387,6 +385,57 @@
                 position="0 0.02 -0.27"
                 bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
                 material="shader: flat; opacity: 0.95"></a-entity>
+            </a-entity>
+          </a-entity>
+
+          <!-- Shield. -->
+          <a-entity
+            id="{{ hand }}Shield"
+            class="shieldEntity"
+            render-order="weapon"
+            bind__visible="isPlaying && gameMode === 'shield'"
+            bind__position="has3DOFVR && '0 0 -0.5' || '0 0 0'"
+            rotation="0 0 0">
+            <a-entity class="shieldContainer" position="0 0.02 -0.05">
+              <!-- Outer Glowing Neon Hex/Ring Frame -->
+              <a-entity
+                class="shieldRim"
+                geometry="primitive: torus; radius: 0.28; radiusTubular: 0.012; segmentsRadial: 8; segmentsTubular: 32"
+                rotation="0 0 0"
+                bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
+                material="shader: flat; opacity: 0.95"></a-entity>
+              <!-- Outer Concentric Pulse Ring -->
+              <a-entity
+                class="shieldOuterRing"
+                geometry="primitive: torus; radius: 0.32; radiusTubular: 0.005; segmentsRadial: 8; segmentsTubular: 32"
+                rotation="0 0 0"
+                bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
+                material="shader: flat; opacity: 0.65; transparent: true"></a-entity>
+              <!-- Translucent Holographic Energy Forcefield Disc -->
+              <a-entity
+                class="shieldEnergyDisc"
+                geometry="primitive: cylinder; radius: 0.26; height: 0.004; segmentsRadial: 24"
+                rotation="90 0 0"
+                bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
+                material="shader: flat; opacity: 0.35; transparent: true"></a-entity>
+              <!-- Center Energy Core -->
+              <a-entity
+                class="shieldCore"
+                geometry="primitive: sphere; radius: 0.038"
+                bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
+                material="shader: flat"></a-entity>
+              <!-- Dual-Shield Resonance Aura (activates when both shields are close together) -->
+              <a-entity
+                class="shieldFusionGlow"
+                geometry="primitive: torus; radius: 0.36; radiusTubular: 0.015"
+                material="color: #ffffff; shader: flat; opacity: 0.85; transparent: true"
+                visible="false"></a-entity>
+              <!-- Gauntlet Handle -->
+              <a-entity
+                geometry="primitive: box; width: 0.04; height: 0.12; depth: 0.05"
+                position="0 -0.04 0.06"
+                rotation="20 0 0"
+                material="color: #1a1a24; roughness: 0.4; metalness: 0.8"></a-entity>
             </a-entity>
           </a-entity>
 
