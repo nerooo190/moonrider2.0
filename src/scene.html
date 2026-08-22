@@ -131,46 +131,46 @@
       drums
       bind__drums="enabled: isPlaying && gameMode === 'drum'"
       bind__visible="isPlaying && gameMode === 'drum'"
-      position="0 0.15 -0.1">
+      position="0 0.05 -0.3">
 
-      <!-- Hi-Hat / Crash Cymbal (Left) -->
-      <a-entity class="drumPad" data-drum-type="hihat" position="-0.7 1.25 -0.6" rotation="18 30 -5">
-        <a-entity class="padRim" geometry="primitive: torus; radius: 0.16; radiusTubular: 0.008" material="color: #ffdd00; shader: flat"></a-entity>
-        <a-entity class="padSurface" geometry="primitive: cylinder; radius: 0.15; height: 0.01" material="color: #2a2510; opacity: 0.8; transparent: true; roughness: 0.3"></a-entity>
-        <a-entity class="padGlow" geometry="primitive: cylinder; radius: 0.16; height: 0.02" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true" visible="false"></a-entity>
-        <a-entity mixin="font" text="value: HI-HAT; align: center; width: 0.8; color: #ffdd00" position="0 0.05 -0.17" rotation="-90 0 0"></a-entity>
+      <!-- Hi-Hat / Crash Cymbal (Left - Gold) -->
+      <a-entity class="drumPad" data-drum-type="hihat" position="-0.65 1.10 -0.85" rotation="32 25 -5">
+        <a-entity class="padRim" geometry="primitive: torus; radius: 0.14; radiusTubular: 0.006" material="color: #ffdd00; shader: flat"></a-entity>
+        <a-entity class="padSurface" geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.138" rotation="-90 0 0" material="color: #ffdd00; shader: flat; opacity: 0.18; transparent: true; side: double"></a-entity>
+        <a-entity class="padGlow" geometry="primitive: circle; radius: 0.14" rotation="-90 0 0" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true; side: double" visible="false"></a-entity>
+        <a-entity mixin="font" text="value: HI-HAT; align: center; width: 0.8; color: #ffdd00" position="0 0.04 -0.16" rotation="-90 0 0"></a-entity>
       </a-entity>
 
-      <!-- Snare Drum (Center-Left) -->
-      <a-entity class="drumPad" data-drum-type="snare" position="-0.32 0.95 -0.55" rotation="15 15 0">
-        <a-entity class="padRim" geometry="primitive: torus; radius: 0.16; radiusTubular: 0.01" bind__material="color: colorPrimary" material="shader: flat"></a-entity>
-        <a-entity class="padSurface" geometry="primitive: cylinder; radius: 0.15; height: 0.03" material="color: #201018; opacity: 0.85; transparent: true; roughness: 0.4"></a-entity>
-        <a-entity class="padGlow" geometry="primitive: cylinder; radius: 0.16; height: 0.04" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true" visible="false"></a-entity>
-        <a-entity mixin="font" text="value: SNARE; align: center; width: 0.8" bind__text="color: colorPrimary" position="0 0.05 -0.17" rotation="-90 0 0"></a-entity>
+      <!-- Snare Drum (Center-Left - Pink/Red) -->
+      <a-entity class="drumPad" data-drum-type="snare" position="-0.28 0.90 -0.80" rotation="28 12 0">
+        <a-entity class="padRim" geometry="primitive: torus; radius: 0.14; radiusTubular: 0.007" material="color: #ff2b75; shader: flat"></a-entity>
+        <a-entity class="padSurface" geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.138" rotation="-90 0 0" material="color: #ff2b75; shader: flat; opacity: 0.20; transparent: true; side: double"></a-entity>
+        <a-entity class="padGlow" geometry="primitive: circle; radius: 0.14" rotation="-90 0 0" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true; side: double" visible="false"></a-entity>
+        <a-entity mixin="font" text="value: SNARE; align: center; width: 0.8; color: #ff2b75" position="0 0.04 -0.16" rotation="-90 0 0"></a-entity>
       </a-entity>
 
-      <!-- Kick / Bass Drum Pad (Center-Bottom) -->
-      <a-entity class="drumPad" data-drum-type="kick" position="0 0.82 -0.55" rotation="25 0 0">
-        <a-entity class="padRim" geometry="primitive: torus; radius: 0.18; radiusTubular: 0.012" material="color: #ff3377; shader: flat"></a-entity>
-        <a-entity class="padSurface" geometry="primitive: cylinder; radius: 0.17; height: 0.03" material="color: #250d18; opacity: 0.85; transparent: true; roughness: 0.4"></a-entity>
-        <a-entity class="padGlow" geometry="primitive: cylinder; radius: 0.18; height: 0.04" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true" visible="false"></a-entity>
-        <a-entity mixin="font" text="value: KICK; align: center; width: 0.8; color: #ff3377" position="0 0.05 -0.19" rotation="-90 0 0"></a-entity>
+      <!-- Kick / Bass Drum Pad (Center-Bottom - Magenta) -->
+      <a-entity class="drumPad" data-drum-type="kick" position="0 0.74 -0.80" rotation="32 0 0">
+        <a-entity class="padRim" geometry="primitive: torus; radius: 0.15; radiusTubular: 0.008" material="color: #ff007f; shader: flat"></a-entity>
+        <a-entity class="padSurface" geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.148" rotation="-90 0 0" material="color: #ff007f; shader: flat; opacity: 0.22; transparent: true; side: double"></a-entity>
+        <a-entity class="padGlow" geometry="primitive: circle; radius: 0.15" rotation="-90 0 0" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true; side: double" visible="false"></a-entity>
+        <a-entity mixin="font" text="value: KICK; align: center; width: 0.8; color: #ff007f" position="0 0.04 -0.17" rotation="-90 0 0"></a-entity>
       </a-entity>
 
-      <!-- High/Mid Tom (Center-Right) -->
-      <a-entity class="drumPad" data-drum-type="tom" position="0.32 1.05 -0.55" rotation="15 -15 0">
-        <a-entity class="padRim" geometry="primitive: torus; radius: 0.16; radiusTubular: 0.01" bind__material="color: colorSecondary" material="shader: flat"></a-entity>
-        <a-entity class="padSurface" geometry="primitive: cylinder; radius: 0.15; height: 0.03" material="color: #101828; opacity: 0.85; transparent: true; roughness: 0.4"></a-entity>
-        <a-entity class="padGlow" geometry="primitive: cylinder; radius: 0.16; height: 0.04" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true" visible="false"></a-entity>
-        <a-entity mixin="font" text="value: TOM; align: center; width: 0.8" bind__text="color: colorSecondary" position="0 0.05 -0.17" rotation="-90 0 0"></a-entity>
+      <!-- High/Mid Tom (Center-Right - Cyan/Blue) -->
+      <a-entity class="drumPad" data-drum-type="tom" position="0.28 0.90 -0.80" rotation="28 -12 0">
+        <a-entity class="padRim" geometry="primitive: torus; radius: 0.14; radiusTubular: 0.007" material="color: #00bbff; shader: flat"></a-entity>
+        <a-entity class="padSurface" geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.138" rotation="-90 0 0" material="color: #00bbff; shader: flat; opacity: 0.20; transparent: true; side: double"></a-entity>
+        <a-entity class="padGlow" geometry="primitive: circle; radius: 0.14" rotation="-90 0 0" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true; side: double" visible="false"></a-entity>
+        <a-entity mixin="font" text="value: TOM; align: center; width: 0.8; color: #00bbff" position="0 0.04 -0.16" rotation="-90 0 0"></a-entity>
       </a-entity>
 
-      <!-- Floor Tom / Ride Cymbal (Right) -->
-      <a-entity class="drumPad" data-drum-type="cymbal" position="0.7 1.25 -0.6" rotation="18 -30 5">
-        <a-entity class="padRim" geometry="primitive: torus; radius: 0.16; radiusTubular: 0.008" material="color: #00e5ff; shader: flat"></a-entity>
-        <a-entity class="padSurface" geometry="primitive: cylinder; radius: 0.15; height: 0.01" material="color: #0d252a; opacity: 0.8; transparent: true; roughness: 0.3"></a-entity>
-        <a-entity class="padGlow" geometry="primitive: cylinder; radius: 0.16; height: 0.02" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true" visible="false"></a-entity>
-        <a-entity mixin="font" text="value: CYMBAL; align: center; width: 0.8; color: #00e5ff" position="0 0.05 -0.17" rotation="-90 0 0"></a-entity>
+      <!-- Floor Tom / Ride Cymbal (Right - Turquoise) -->
+      <a-entity class="drumPad" data-drum-type="cymbal" position="0.65 1.10 -0.85" rotation="32 -25 5">
+        <a-entity class="padRim" geometry="primitive: torus; radius: 0.14; radiusTubular: 0.006" material="color: #00f0ff; shader: flat"></a-entity>
+        <a-entity class="padSurface" geometry="primitive: ring; radiusInner: 0.005; radiusOuter: 0.138" rotation="-90 0 0" material="color: #00f0ff; shader: flat; opacity: 0.18; transparent: true; side: double"></a-entity>
+        <a-entity class="padGlow" geometry="primitive: circle; radius: 0.14" rotation="-90 0 0" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true; side: double" visible="false"></a-entity>
+        <a-entity mixin="font" text="value: CYMBAL; align: center; width: 0.8; color: #00f0ff" position="0 0.04 -0.16" rotation="-90 0 0"></a-entity>
       </a-entity>
     </a-entity>
 
