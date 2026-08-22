@@ -27,23 +27,19 @@ AFRAME.registerComponent('menu-mode', {
   init: function () {
     this.el.addEventListener('click', evt => {
       const item = evt.target.closest('[data-mode]');
+      if (!item) { return; }
       const mode = item.dataset.mode;
       const name = item.dataset.name;
       this.el.sceneEl.emit('gamemode', mode, false);
-      if (this.data.hasVR) {
-        localStorage.setItem('gameMode', name);
-      }
+      localStorage.setItem('gameMode', name);
       this.setModeOption(name);
     });
   },
 
   update: function () {
-    if (this.data.hasVR) {
-      this.setModeOption(localStorage.getItem('gameMode') || 'punchvr');
-      this.el.sceneEl.emit('gamemode', modeMap[localStorage.getItem('gameMode') || 'punchvr']);
-    } else {
-      this.setModeOption('ride2d');
-    }
+    const selectedMode = localStorage.getItem('gameMode') || 'gunvr';
+    this.setModeOption(selectedMode);
+    this.el.sceneEl.emit('gamemode', modeMap[selectedMode] || 'gun');
   },
 
   setModeOption: function (name) {
