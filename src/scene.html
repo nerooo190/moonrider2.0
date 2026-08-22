@@ -125,6 +125,55 @@
     <!-- Beat pieces, explosions, fx, and weapon trail. -->
     <a-entity id="rigContainer"></a-entity>
 
+    <!-- Floating Virtual Drum Kit. -->
+    <a-entity
+      id="floatingDrums"
+      drums
+      bind__drums="enabled: isPlaying && gameMode === 'drum'"
+      bind__visible="isPlaying && gameMode === 'drum'"
+      position="0 0.15 -0.1">
+
+      <!-- Hi-Hat / Crash Cymbal (Left) -->
+      <a-entity class="drumPad" data-drum-type="hihat" position="-0.7 1.25 -0.6" rotation="18 30 -5">
+        <a-entity class="padRim" geometry="primitive: torus; radius: 0.16; radiusTubular: 0.008" material="color: #ffdd00; shader: flat"></a-entity>
+        <a-entity class="padSurface" geometry="primitive: cylinder; radius: 0.15; height: 0.01" material="color: #2a2510; opacity: 0.8; transparent: true; roughness: 0.3"></a-entity>
+        <a-entity class="padGlow" geometry="primitive: cylinder; radius: 0.16; height: 0.02" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true" visible="false"></a-entity>
+        <a-entity mixin="font" text="value: HI-HAT; align: center; width: 0.8; color: #ffdd00" position="0 0.05 -0.17" rotation="-90 0 0"></a-entity>
+      </a-entity>
+
+      <!-- Snare Drum (Center-Left) -->
+      <a-entity class="drumPad" data-drum-type="snare" position="-0.32 0.95 -0.55" rotation="15 15 0">
+        <a-entity class="padRim" geometry="primitive: torus; radius: 0.16; radiusTubular: 0.01" bind__material="color: colorPrimary" material="shader: flat"></a-entity>
+        <a-entity class="padSurface" geometry="primitive: cylinder; radius: 0.15; height: 0.03" material="color: #201018; opacity: 0.85; transparent: true; roughness: 0.4"></a-entity>
+        <a-entity class="padGlow" geometry="primitive: cylinder; radius: 0.16; height: 0.04" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true" visible="false"></a-entity>
+        <a-entity mixin="font" text="value: SNARE; align: center; width: 0.8" bind__text="color: colorPrimary" position="0 0.05 -0.17" rotation="-90 0 0"></a-entity>
+      </a-entity>
+
+      <!-- Kick / Bass Drum Pad (Center-Bottom) -->
+      <a-entity class="drumPad" data-drum-type="kick" position="0 0.82 -0.55" rotation="25 0 0">
+        <a-entity class="padRim" geometry="primitive: torus; radius: 0.18; radiusTubular: 0.012" material="color: #ff3377; shader: flat"></a-entity>
+        <a-entity class="padSurface" geometry="primitive: cylinder; radius: 0.17; height: 0.03" material="color: #250d18; opacity: 0.85; transparent: true; roughness: 0.4"></a-entity>
+        <a-entity class="padGlow" geometry="primitive: cylinder; radius: 0.18; height: 0.04" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true" visible="false"></a-entity>
+        <a-entity mixin="font" text="value: KICK; align: center; width: 0.8; color: #ff3377" position="0 0.05 -0.19" rotation="-90 0 0"></a-entity>
+      </a-entity>
+
+      <!-- High/Mid Tom (Center-Right) -->
+      <a-entity class="drumPad" data-drum-type="tom" position="0.32 1.05 -0.55" rotation="15 -15 0">
+        <a-entity class="padRim" geometry="primitive: torus; radius: 0.16; radiusTubular: 0.01" bind__material="color: colorSecondary" material="shader: flat"></a-entity>
+        <a-entity class="padSurface" geometry="primitive: cylinder; radius: 0.15; height: 0.03" material="color: #101828; opacity: 0.85; transparent: true; roughness: 0.4"></a-entity>
+        <a-entity class="padGlow" geometry="primitive: cylinder; radius: 0.16; height: 0.04" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true" visible="false"></a-entity>
+        <a-entity mixin="font" text="value: TOM; align: center; width: 0.8" bind__text="color: colorSecondary" position="0 0.05 -0.17" rotation="-90 0 0"></a-entity>
+      </a-entity>
+
+      <!-- Floor Tom / Ride Cymbal (Right) -->
+      <a-entity class="drumPad" data-drum-type="cymbal" position="0.7 1.25 -0.6" rotation="18 -30 5">
+        <a-entity class="padRim" geometry="primitive: torus; radius: 0.16; radiusTubular: 0.008" material="color: #00e5ff; shader: flat"></a-entity>
+        <a-entity class="padSurface" geometry="primitive: cylinder; radius: 0.15; height: 0.01" material="color: #0d252a; opacity: 0.8; transparent: true; roughness: 0.3"></a-entity>
+        <a-entity class="padGlow" geometry="primitive: cylinder; radius: 0.16; height: 0.02" material="color: #ffffff; opacity: 0.9; shader: flat; transparent: true" visible="false"></a-entity>
+        <a-entity mixin="font" text="value: CYMBAL; align: center; width: 0.8; color: #00e5ff" position="0 0.05 -0.17" rotation="-90 0 0"></a-entity>
+      </a-entity>
+    </a-entity>
+
     <!-- Supercut FX rings. -->
     {% for i in range(1, 5) %}
       <a-entity class="superCutFx" mixin="superCut"></a-entity>
@@ -163,6 +212,7 @@
           bind__pauser="enabled: isPlaying"
           bind__punch="enabled: isPlaying && gameMode === 'punch'"
           bind__gun="enabled: isPlaying && gameMode === 'gun'"
+          bind__drumstick="enabled: isPlaying && gameMode === 'drum'"
           bind__raycaster="enabled: {{ hand }}RaycasterActive"
           bind__raycaster__game="enabled: isPlaying && (gameMode === 'classic' || gameMode === 'punch')"
           bind__blade="enabled: isPlaying && gameMode === 'classic'"
@@ -170,6 +220,7 @@
           bind__trail="colorScheme: colorScheme; enabled: isPlaying && gameMode === 'classic'"
           controller="hand: {{ hand }}"
           gun="hand: {{ hand }}"
+          drumstick="hand: {{ hand }}"
           data-hand="{{ hand }}"
           haptics="events: mouseenter; dur: 35; force: 0.075"
           haptics__beat="events: beathaptic; dur: 90; force: 0.55"
@@ -307,6 +358,35 @@
                 bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
                 material="shader: flat; transparent: true; opacity: 0.95"
                 visible="false"></a-entity>
+            </a-entity>
+          </a-entity>
+
+          <!-- Drumstick. -->
+          <a-entity
+            id="{{ hand }}Drumstick"
+            class="drumstickEntity"
+            render-order="weapon"
+            bind__visible="isPlaying && gameMode === 'drum'"
+            bind__position="has3DOFVR && '0 0 -0.5' || '0 0 0'"
+            rotation="0 0 0">
+            <a-entity class="drumstickContainer" rotation="25 0 0" position="0 0.02 -0.05">
+              <a-entity
+                geometry="primitive: cylinder; radius: 0.012; height: 0.12"
+                position="0 -0.04 0.06"
+                rotation="90 0 0"
+                bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
+                material="shader: flat"></a-entity>
+              <a-entity
+                geometry="primitive: cylinder; radiusTop: 0.006; radiusBottom: 0.01; height: 0.28"
+                position="0 0.02 -0.12"
+                rotation="90 0 0"
+                material="color: #222230; roughness: 0.4; metalness: 0.8"></a-entity>
+              <a-entity
+                class="drumstickTip"
+                geometry="primitive: sphere; radius: 0.018"
+                position="0 0.02 -0.27"
+                bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
+                material="shader: flat; opacity: 0.95"></a-entity>
             </a-entity>
           </a-entity>
 
