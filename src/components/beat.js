@@ -27,6 +27,7 @@ const CLASSIC = 'classic';
 const DOT = 'dot';
 const PUNCH = 'punch';
 const RIDE = 'ride';
+const GUN = 'gun';
 
 const CUT_DIRECTION_VECTORS = {
   up: new THREE.Vector3(0, 1, 0),
@@ -63,12 +64,13 @@ const ROTATIONS = {
 const SIZES = {
   [CLASSIC]: 0.48,
   [PUNCH]: 0.35,
-  [RIDE]: 0.4
+  [RIDE]: 0.4,
+  [GUN]: 0.42
 };
 
 AFRAME.registerComponent('beat-system', {
   schema: {
-    gameMode: { default: 'classic', oneOf: ['classic', 'punch', 'ride'] },
+    gameMode: { default: 'classic', oneOf: ['classic', 'punch', 'ride', 'gun'] },
     hasVR: { default: false },
     inVR: { default: false },
     isLoading: { default: false },
@@ -80,11 +82,13 @@ AFRAME.registerComponent('beat-system', {
     this.beatsToCheck = [];
     this.blades = [];
     this.fists = [];
+    this.guns = [];
     this.weapons = null;
 
     this.bladeEls = this.el.sceneEl.querySelectorAll('a-entity[blade]');
     this.curveFollowRig = document.getElementById('curveFollowRig');
     this.punchEls = this.el.sceneEl.querySelectorAll('a-entity[punch]');
+    this.gunEls = this.el.sceneEl.querySelectorAll('a-entity[gun]');
     this.curveEl = document.getElementById('curve');
     this.size = SIZES[this.data.gameMode];
     this.supercurveFollow = null;
@@ -92,8 +96,9 @@ AFRAME.registerComponent('beat-system', {
 
   play: function () {
     for (let i = 0; i < 2; i++) {
-      this.blades.push(this.bladeEls[i].components.blade);
-      this.fists.push(this.punchEls[i].components.punch);
+      if (this.bladeEls[i]) { this.blades.push(this.bladeEls[i].components.blade); }
+      if (this.punchEls[i]) { this.fists.push(this.punchEls[i].components.punch); }
+      if (this.gunEls[i]) { this.guns.push(this.gunEls[i].components.gun); }
     }
 
     this.supercurve = this.curveEl.components.supercurve;
@@ -105,12 +110,18 @@ AFRAME.registerComponent('beat-system', {
 
     if (oldData.isLoading && !this.data.isLoading) {
       this.updateBeatPositioning();
-      this.weaponOffset = this.data.gameMode === CLASSIC ? SWORD_OFFSET * 1.15 : PUNCH_OFFSET;
+      this.weaponOffset = this.data.gameMode === CLASSIC ? SWORD_OFFSET * 1.15 : (this.data.gameMode === GUN ? SWORD_OFFSET : PUNCH_OFFSET);
       this.weaponOffset = this.weaponOffset / this.supercurve.curve.getLength();
     }
 
     if (oldData.gameMode !== this.data.gameMode) {
-      this.weapons = this.data.gameMode === CLASSIC ? this.blades : this.fists;
+      if (this.data.gameMode === CLASSIC) {
+        this.weapons = this.blades;
+      } else if (this.data.gameMode === PUNCH) {
+        this.weapons = this.fists;
+      } else if (this.data.gameMode === GUN) {
+        this.weapons = this.guns;
+      }
     }
   },
 
@@ -218,7 +229,8 @@ AFRAME.registerComponent('beat-system', {
     const BOTTOM_HEIGHTS = {
       [CLASSIC]: 0.95,
       [RIDE]: 0.95,
-      [PUNCH]: 1.20
+      [PUNCH]: 1.20,
+      [GUN]: 1.10
     };
 
     const BOTTOM_HEIGHT_MIN = 0.4;

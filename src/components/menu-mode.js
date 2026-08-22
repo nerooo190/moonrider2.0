@@ -1,18 +1,20 @@
 const COLORS = require('../constants/colors.js');
 
 const iconPositions = {
+  gunvr: 0.87,
+  punchvr: 0.15,
   classicvr: -0.6,
-  punchvr: 0.87,
+  ridevr: -1.35,
   ride2d: 0.87,
-  ridevr: 0.15,
   viewer2d: 0.15
 };
 
 const modeMap = {
-  classicvr: 'classic',
+  gunvr: 'gun',
   punchvr: 'punch',
-  ride2d: 'ride',
+  classicvr: 'classic',
   ridevr: 'ride',
+  ride2d: 'ride',
   viewer2d: 'viewer'
 };
 

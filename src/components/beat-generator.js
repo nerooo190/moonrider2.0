@@ -273,7 +273,7 @@ AFRAME.registerComponent('beat-generator', {
       return;
     }
 
-    if (AFRAME.utils.getUrlParameter('dot') || data.gameMode === 'punch') { type = 'dot'; }
+    if (AFRAME.utils.getUrlParameter('dot') || data.gameMode === 'punch' || data.gameMode === 'gun') { type = 'dot'; }
 
     const beatEl = this.requestBeat(type, color);
     if (!beatEl) { return; }
@@ -296,7 +296,7 @@ AFRAME.registerComponent('beat-generator', {
     const verticalPosition = this.verticalPositionsHumanized[noteInfo._lineLayer] || 'middle';
 
     // Factor in sword offset and beat anticipation time (percentage).
-    const weaponOffset = this.data.gameMode === 'classic' ? SWORD_OFFSET : PUNCH_OFFSET;
+    const weaponOffset = this.data.gameMode === 'classic' ? SWORD_OFFSET : (this.data.gameMode === 'gun' ? SWORD_OFFSET : PUNCH_OFFSET);
     const positionOffset =
     ((weaponOffset / data.speed) + BEAT_ANTICIPATION_TIME) /
     data.songDuration;

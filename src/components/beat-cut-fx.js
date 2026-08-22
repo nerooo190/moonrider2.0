@@ -141,10 +141,10 @@ AFRAME.registerComponent('beat-cut-fx', {
       }
     }
 
-    this.pool = this[gameMode === 'classic' ? 'poolBeat' : 'poolPunch'];
+    this.pool = this[gameMode === 'classic' ? 'poolBeat' : (this.poolPunch ? 'poolPunch' : 'poolBeat')];
 
     if (this.fx === null) {
-      this.fxpool = this[gameMode === 'classic' ? 'poolBeatFx' : 'poolPunchFx'];
+      this.fxpool = this[gameMode === 'classic' ? 'poolBeatFx' : (this.poolPunchFx ? 'poolPunchFx' : 'poolBeatFx')];
       this.fx = this.fxpool.requestEntity();
     }
     if (this.fx) {
