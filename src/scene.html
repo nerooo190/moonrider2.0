@@ -162,12 +162,14 @@
           bind__menu-controls="enabled: mainMenuActive"
           bind__pauser="enabled: isPlaying"
           bind__punch="enabled: isPlaying && gameMode === 'punch'"
+          bind__gun="enabled: isPlaying && gameMode === 'gun'"
           bind__raycaster="enabled: {{ hand }}RaycasterActive"
           bind__raycaster__game="enabled: isPlaying && (gameMode === 'classic' || gameMode === 'punch')"
           bind__blade="enabled: isPlaying && gameMode === 'classic'"
           bind__weapon-particles="enabled: isPlaying; gameMode: gameMode"
           bind__trail="colorScheme: colorScheme; enabled: isPlaying && gameMode === 'classic'"
           controller="hand: {{ hand }}"
+          gun="hand: {{ hand }}"
           data-hand="{{ hand }}"
           haptics="events: mouseenter; dur: 35; force: 0.075"
           haptics__beat="events: beathaptic; dur: 90; force: 0.55"
@@ -242,6 +244,70 @@
               <a-entity
                 obj-model="obj: #{{ hand }}FistWeaponObj"
                 materials="name: {{ hand }}FistWeapon"></a-entity>
+          </a-entity>
+
+          <!-- Gun. -->
+          <a-entity
+            id="{{ hand }}Gun"
+            class="gunEntity"
+            render-order="weapon"
+            bind__visible="isPlaying && gameMode === 'gun'"
+            bind__position="has3DOFVR && '0 0 -0.5' || '0 0 0'"
+            rotation="0 0 0">
+            <a-entity class="gunContainer" position="0 0 0">
+              <a-entity
+                geometry="primitive: box; width: 0.038; height: 0.11; depth: 0.045"
+                position="0 -0.04 0.02"
+                rotation="20 0 0"
+                material="color: #1a1a24; roughness: 0.4; metalness: 0.8"></a-entity>
+              <a-entity
+                geometry="primitive: box; width: 0.05; height: 0.06; depth: 0.16"
+                position="0 0.02 -0.04"
+                material="color: #222230; roughness: 0.3; metalness: 0.9"></a-entity>
+              <a-entity
+                geometry="primitive: cylinder; radius: 0.02; height: 0.13"
+                rotation="90 0 0"
+                position="0 0.02 -0.04"
+                bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
+                material="shader: flat; opacity: 0.9"></a-entity>
+              <a-entity
+                geometry="primitive: box; width: 0.055; height: 0.012; depth: 0.15"
+                position="0 0.048 -0.04"
+                bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
+                material="shader: flat"></a-entity>
+              <a-entity
+                geometry="primitive: cylinder; radius: 0.014; height: 0.1"
+                rotation="90 0 0"
+                position="0 0.02 -0.16"
+                material="color: #111118; roughness: 0.2; metalness: 0.9"></a-entity>
+              <a-entity
+                geometry="primitive: torus; radius: 0.018; radiusTubular: 0.004"
+                position="0 0.02 -0.21"
+                bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
+                material="shader: flat"></a-entity>
+              <a-entity
+                class="laserSight"
+                geometry="primitive: cylinder; radius: 0.002; height: 20"
+                rotation="-90 0 0"
+                position="0 0.02 -10.21"
+                bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
+                material="shader: flat; opacity: 0.35; transparent: true"></a-entity>
+              <a-entity
+                class="muzzleFlash"
+                geometry="primitive: sphere; radius: 0.06"
+                position="0 0.02 -0.22"
+                bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
+                material="shader: flat; transparent: true; opacity: 0.9"
+                visible="false"></a-entity>
+              <a-entity
+                class="laserBolt"
+                geometry="primitive: cylinder; radius: 0.012; height: 0.5"
+                rotation="-90 0 0"
+                position="0 0.02 -0.3"
+                bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
+                material="shader: flat; transparent: true; opacity: 0.95"
+                visible="false"></a-entity>
+            </a-entity>
           </a-entity>
 
           <!-- Ride. -->
