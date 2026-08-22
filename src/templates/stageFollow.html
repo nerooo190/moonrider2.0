@@ -2,7 +2,7 @@
 
 <a-entity
   id="sideGlows"
-  bind__visible="isPlaying || isPaused">
+  bind__visible="(isPlaying || isPaused) && gameMode !== 'drum'">
   <a-entity
     id="leftSideGlow"
     geometry="primitive: plane; width: 8; height: 2"
