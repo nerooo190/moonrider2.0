@@ -41,11 +41,8 @@ AFRAME.registerComponent('zip-loader', {
       this.fetchZip(data.version);
     }
 
-    // Faulty ZIP.
-    if (!oldData.isLoading && this.data.isLoading &&
-      this.cachedVersion === this.data.version &&
-      !this.cachedZip) {
-      this.el.emit('songloaderror');
+    if (this.data.isLoading && this.cachedZip && this.cachedVersion === this.data.version) {
+      this.el.emit('ziploaderend', this.cachedZip, false);
     }
   },
 

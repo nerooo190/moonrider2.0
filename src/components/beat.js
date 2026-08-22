@@ -28,6 +28,7 @@ const DOT = 'dot';
 const PUNCH = 'punch';
 const RIDE = 'ride';
 const GUN = 'gun';
+const DRUM = 'drum';
 
 const CUT_DIRECTION_VECTORS = {
   up: new THREE.Vector3(0, 1, 0),
@@ -65,12 +66,13 @@ const SIZES = {
   [CLASSIC]: 0.48,
   [PUNCH]: 0.35,
   [RIDE]: 0.4,
-  [GUN]: 0.42
+  [GUN]: 0.42,
+  [DRUM]: 0.40
 };
 
 AFRAME.registerComponent('beat-system', {
   schema: {
-    gameMode: { default: 'classic', oneOf: ['classic', 'punch', 'ride', 'gun'] },
+    gameMode: { default: 'classic', oneOf: ['classic', 'punch', 'ride', 'gun', 'drum'] },
     hasVR: { default: false },
     inVR: { default: false },
     isLoading: { default: false },
@@ -83,12 +85,14 @@ AFRAME.registerComponent('beat-system', {
     this.blades = [];
     this.fists = [];
     this.guns = [];
+    this.drumsticks = [];
     this.weapons = null;
 
     this.bladeEls = this.el.sceneEl.querySelectorAll('a-entity[blade]');
     this.curveFollowRig = document.getElementById('curveFollowRig');
     this.punchEls = this.el.sceneEl.querySelectorAll('a-entity[punch]');
     this.gunEls = this.el.sceneEl.querySelectorAll('a-entity[gun]');
+    this.drumstickEls = this.el.sceneEl.querySelectorAll('a-entity[drumstick]');
     this.curveEl = document.getElementById('curve');
     this.size = SIZES[this.data.gameMode];
     this.supercurveFollow = null;
@@ -99,6 +103,7 @@ AFRAME.registerComponent('beat-system', {
       if (this.bladeEls[i]) { this.blades.push(this.bladeEls[i].components.blade); }
       if (this.punchEls[i]) { this.fists.push(this.punchEls[i].components.punch); }
       if (this.gunEls[i]) { this.guns.push(this.gunEls[i].components.gun); }
+      if (this.drumstickEls[i]) { this.drumsticks.push(this.drumstickEls[i].components.drumstick); }
     }
 
     this.supercurve = this.curveEl.components.supercurve;
@@ -121,6 +126,8 @@ AFRAME.registerComponent('beat-system', {
         this.weapons = this.fists;
       } else if (this.data.gameMode === GUN) {
         this.weapons = this.guns;
+      } else if (this.data.gameMode === DRUM) {
+        this.weapons = this.drumsticks;
       }
     }
   },
@@ -230,7 +237,8 @@ AFRAME.registerComponent('beat-system', {
       [CLASSIC]: 0.95,
       [RIDE]: 0.95,
       [PUNCH]: 1.20,
-      [GUN]: 1.10
+      [GUN]: 1.10,
+      [DRUM]: 0.95
     };
 
     const BOTTOM_HEIGHT_MIN = 0.4;

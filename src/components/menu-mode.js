@@ -1,21 +1,19 @@
 const COLORS = require('../constants/colors.js');
 
 const iconPositions = {
-  gunvr: 0.87,
-  punchvr: 0.15,
-  classicvr: -0.6,
-  ridevr: -1.35,
-  ride2d: 0.87,
-  viewer2d: 0.15
+  gunvr: 1.12,
+  drumvr: 0.56,
+  punchvr: 0.0,
+  classicvr: -0.56,
+  ridevr: -1.12
 };
 
 const modeMap = {
   gunvr: 'gun',
+  drumvr: 'drum',
   punchvr: 'punch',
   classicvr: 'classic',
-  ridevr: 'ride',
-  ride2d: 'ride',
-  viewer2d: 'viewer'
+  ridevr: 'ride'
 };
 
 AFRAME.registerComponent('menu-mode', {

@@ -105,7 +105,7 @@ AFRAME.registerComponent('beat-generator', {
     this.el.addEventListener('ziploaderend', evt => {
       this.beats = evt.detail.beats;
       if (!this.data.challengeId || this.data.hasSongLoadError) { return; }
-      this.beatData = this.beats[this.data.beatmapCharacteristic + '-' + this.data.difficulty];
+      this.beatData = this.getBeatData();
       this.processBeats();
     });
 
@@ -129,6 +129,40 @@ AFRAME.registerComponent('beat-generator', {
     this.playerHeight = document.querySelector('[player-height]').components['player-height'];
   },
 
+  getBeatData: function () {
+    if (!this.beats) { return null; }
+    const char = this.data.beatmapCharacteristic || 'Standard';
+    const diff = this.data.difficulty || '';
+    const diffLower = diff.toLowerCase();
+
+    const candidates = [
+      char + '-' + diff,
+      char + '-' + diffLower,
+      'Standard-' + diff,
+      'Standard-' + diffLower,
+      diff,
+      diffLower
+    ];
+
+    for (let i = 0; i < candidates.length; i++) {
+      if (this.beats[candidates[i]]) {
+        return this.beats[candidates[i]];
+      }
+    }
+
+    const keys = Object.keys(this.beats);
+    for (let i = 0; i < keys.length; i++) {
+      if (keys[i].toLowerCase().indexOf(diffLower) !== -1) {
+        return this.beats[keys[i]];
+      }
+    }
+
+    if (keys.length > 0) {
+      return this.beats[keys[0]];
+    }
+    return null;
+  },
+
   update: function (oldData) {
     const data = this.data;
 
@@ -140,7 +174,7 @@ AFRAME.registerComponent('beat-generator', {
 
       // Process.
       if (!this.data.isZipFetching && this.beats && !this.data.hasSongLoadError) {
-        this.beatData = this.beats[this.data.beatmapCharacteristic + '-' + this.data.difficulty];
+        this.beatData = this.getBeatData();
         this.processBeats();
       }
 
@@ -154,9 +188,10 @@ AFRAME.registerComponent('beat-generator', {
    * Load the beat data into the game.
    */
   processBeats: function () {
-    if (this.data.hasSongLoadError) { return; }
-    // if there is version and first character is 3, convert to 2.xx
-    if (this.beatData.version  && this.beatData.version.charAt(0) === '3') {
+    if (this.data.hasSongLoadError || !this.beatData) { return; }
+    // if there is version and first character is 3 or 4, or has colorNotes, convert to 2.xx
+    const ver = this.beatData.version || this.beatData._version || '';
+    if (ver.charAt(0) === '3' || ver.charAt(0) === '4' || this.beatData.colorNotes) {
       this.beatData = convertBeatData_320_to_2xx(this.beatData);
     }
     // Reset variables used during playback.
@@ -273,7 +308,7 @@ AFRAME.registerComponent('beat-generator', {
       return;
     }
 
-    if (AFRAME.utils.getUrlParameter('dot') || data.gameMode === 'punch' || data.gameMode === 'gun') { type = 'dot'; }
+    if (AFRAME.utils.getUrlParameter('dot') || data.gameMode === 'punch' || data.gameMode === 'gun' || data.gameMode === 'drum') { type = 'dot'; }
 
     const beatEl = this.requestBeat(type, color);
     if (!beatEl) { return; }
@@ -449,47 +484,55 @@ function lessThan(a, b) { return a._time - b._time; }
 
 function convertBeatData_320_to_2xx(beatData) {
   const newBeatData = {
-    _version: '3.2.2',
+    _version: '2.0.0',
     _beatsPerMinute: beatData._beatsPerMinute,
-    _events: [],
+    _events: beatData._events || [],
     _notes: [],
     _obstacles: []
   };
-  // ignore bmpEvents
-  // ingore rotationEvents
-  // convert notes
-  newBeatData._notes = beatData.colorNotes.map(note => {
-    return {
-      _time: note.b,
-      _lineIndex: note.x,
-      _lineLayer: note.y,
-      _type: note.c, // 0 = red, 1 = blue 
-      _cutDirection: note.d
-    };
-  });
-  // convert bombs ( add to notes )
-  for (const bomb of beatData.bombNotes) {
-    newBeatData._notes.push({
-      _time: bomb.b,
-      _lineIndex: bomb.x,
-      _lineLayer: bomb.y,
-      _type: 3, // 3 = bomb 
+
+  if (beatData.colorNotes && Array.isArray(beatData.colorNotes)) {
+    newBeatData._notes = beatData.colorNotes.map(note => {
+      return {
+        _time: note.b !== undefined ? note.b : note._time,
+        _lineIndex: note.x !== undefined ? note.x : note._lineIndex,
+        _lineLayer: note.y !== undefined ? note.y : note._lineLayer,
+        _type: note.c !== undefined ? note.c : note._type,
+        _cutDirection: note.d !== undefined ? note.d : note._cutDirection
+      };
     });
+  } else if (beatData._notes && Array.isArray(beatData._notes)) {
+    newBeatData._notes = beatData._notes.slice();
   }
-  // sort notes by time ascending
+
+  if (beatData.bombNotes && Array.isArray(beatData.bombNotes)) {
+    for (const bomb of beatData.bombNotes) {
+      newBeatData._notes.push({
+        _time: bomb.b !== undefined ? bomb.b : bomb._time,
+        _lineIndex: bomb.x !== undefined ? bomb.x : bomb._lineIndex,
+        _lineLayer: bomb.y !== undefined ? bomb.y : bomb._lineLayer,
+        _type: 3
+      });
+    }
+  }
+
   newBeatData._notes.sort((a, b) => a._time - b._time);
-  // convert obstacles
-  newBeatData._obstacles = beatData.obstacles.map(obstacle => {
-    return {
-      _time: obstacle.b,
-      _lineIndex: obstacle.x,
-      _lineLayer: obstacle.y,
-      _type: obstacle._type,
-      _duration: obstacle.d,
-      _width: obstacle.w,
-      _height: obstacle.h
-    };
-  });
+
+  if (beatData.obstacles && Array.isArray(beatData.obstacles)) {
+    newBeatData._obstacles = beatData.obstacles.map(obstacle => {
+      return {
+        _time: obstacle.b !== undefined ? obstacle.b : obstacle._time,
+        _lineIndex: obstacle.x !== undefined ? obstacle.x : obstacle._lineIndex,
+        _lineLayer: obstacle.y !== undefined ? obstacle.y : obstacle._lineLayer,
+        _type: obstacle._type || 0,
+        _duration: obstacle.d !== undefined ? obstacle.d : obstacle._duration,
+        _width: obstacle.w !== undefined ? obstacle.w : obstacle._width,
+        _height: obstacle.h !== undefined ? obstacle.h : obstacle._height
+      };
+    });
+  } else if (beatData._obstacles && Array.isArray(beatData._obstacles)) {
+    newBeatData._obstacles = beatData._obstacles.slice();
+  }
 
   return newBeatData;
 }
