@@ -16,10 +16,16 @@ const DAMAGE_MAX = 10;
 
 const difficultyMap = {
   "Easy": 'Easy',
+  "Normal": 'Normal',
+  "Hard": 'Hard',
   "Expert": 'Expert',
   "ExpertPlus": 'Expert+',
-  "Hard": 'Hard',
-  "Normal": 'Normal',
+  "easy": 'Easy',
+  "normal": 'Normal',
+  "hard": 'Hard',
+  "expert": 'Expert',
+  "expertPlus": 'Expert+',
+  "expertplus": 'Expert+'
 };
 
 const badSongs = {};
@@ -579,10 +585,15 @@ AFRAME.registerState({
           break;
         }
       }
-      state.menuSelectedChallenge.difficultyId = difficultyId;
-      state.menuSelectedChallenge.difficulty = difficulty.difficulty;
-      state.menuSelectedChallenge.beatmapCharacteristic = difficulty.beatmapCharacteristic;
-      updateMenuSongInfo(state, state.menuSelectedChallenge);
+      if (!difficulty && state.menuDifficulties.length > 0) {
+        difficulty = state.menuDifficulties[0];
+      }
+      if (difficulty) {
+        state.menuSelectedChallenge.difficultyId = difficulty.id;
+        state.menuSelectedChallenge.difficulty = difficulty.difficulty;
+        state.menuSelectedChallenge.beatmapCharacteristic = difficulty.beatmapCharacteristic;
+        updateMenuSongInfo(state, state.menuSelectedChallenge);
+      }
 
       clearLeaderboard(state);
       state.leaderboardLoading = true;
@@ -910,11 +921,15 @@ function truncate(str, length) {
   return str;
 }
 
-const DIFFICULTIES = ['easy', 'normal', 'hard', 'expert', 'expertPlus'];
+const DIFFICULTIES = ['easy', 'normal', 'hard', 'expert', 'expertplus', 'expert+'];
 const CHARACTERISTICS = ['Standard'];
 function difficultyComparator(a, b) {
-  const aIndex = DIFFICULTIES.indexOf(a.difficulty);
-  const bIndex = DIFFICULTIES.indexOf(b.difficulty);
+  const aDiff = (a.difficulty || '').toLowerCase().replace('+', 'plus');
+  const bDiff = (b.difficulty || '').toLowerCase().replace('+', 'plus');
+  let aIndex = DIFFICULTIES.indexOf(aDiff);
+  let bIndex = DIFFICULTIES.indexOf(bDiff);
+  if (aIndex === -1) aIndex = 99;
+  if (bIndex === -1) bIndex = 99;
   if (aIndex < bIndex) { return -1; }
   if (aIndex > bIndex) { return 1; }
 
