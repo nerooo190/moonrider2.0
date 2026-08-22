@@ -252,15 +252,20 @@ AFRAME.registerComponent('beat-system', {
       const heightOffset = this.el.sceneEl.camera.el.object3D.position.y - REFERENCE_HEIGHT;
       const size = SIZES[gameMode];
 
-      // Horizontal margin based on size of blocks so they don't overlap, which a smidge
-      // of extra margin.
-      // For punch mode, we want a wider horizontal spread in punch range, but not vertical.
-      const hMargin = gameMode === CLASSIC ? size : size * 1.2;
-      horizontalPositions.left = -1.5 * hMargin;
-      horizontalPositions.middleleft = -0.5 * hMargin;
-      horizontalPositions.middle = hMargin;
-      horizontalPositions.middleright = 0.5 * hMargin;
-      horizontalPositions.right = 1.5 * hMargin;
+      if (gameMode === DRUM) {
+        horizontalPositions.left = -0.65;
+        horizontalPositions.middleleft = -0.28;
+        horizontalPositions.middle = 0;
+        horizontalPositions.middleright = 0.28;
+        horizontalPositions.right = 0.65;
+      } else {
+        const hMargin = gameMode === CLASSIC ? size : size * 1.2;
+        horizontalPositions.left = -1.5 * hMargin;
+        horizontalPositions.middleleft = -0.5 * hMargin;
+        horizontalPositions.middle = hMargin;
+        horizontalPositions.middleright = 0.5 * hMargin;
+        horizontalPositions.right = 1.5 * hMargin;
+      }
 
       // Vertical margin based on size of blocks so they don't overlap.
       // And then overall shifted up and down based on user height (camera Y).
@@ -430,6 +435,38 @@ AFRAME.registerComponent('beat', {
     el.object3D.position.y -= offset;
     this.positionStart = el.object3D.position.y;
     this.positionChange = this.verticalPositions[verticalPosition] + offset + heightOffset;
+
+    // Drum mode: colorize notes to match the exact drum pad
+    if (this.beatSystem.data.gameMode === DRUM && this.data.type !== MINE) {
+      const mesh = this.blockEl.getObject3D('mesh');
+      if (mesh) {
+        let drumColor = '#ff2b75'; // Snare default
+        if (horizontalPosition === 'left') {
+          drumColor = '#ffdd00'; // Hi-Hat Gold
+        } else if (horizontalPosition === 'middleleft') {
+          drumColor = '#ff2b75'; // Snare Pink
+        } else if (horizontalPosition === 'middleright') {
+          drumColor = '#00bbff'; // Tom Cyan
+        } else if (horizontalPosition === 'right') {
+          drumColor = '#00f0ff'; // Cymbal Turquoise
+        }
+        if (verticalPosition === 'bottom') {
+          drumColor = '#ff007f'; // Kick Magenta
+        }
+
+        mesh.traverse(node => {
+          if (node.isMesh && node.material) {
+            if (!node._origMaterial) { node._origMaterial = node.material; }
+            if (!node._drumMaterial) { node._drumMaterial = node.material.clone(); }
+            node.material = node._drumMaterial;
+            node.material.color = new THREE.Color(drumColor);
+            if (node.material.emissive) {
+              node.material.emissive = new THREE.Color(drumColor);
+            }
+          }
+        });
+      }
+    }
   },
 
   /**
@@ -511,6 +548,16 @@ AFRAME.registerComponent('beat', {
    */
   returnToPool: function () {
     this.beatSystem.unregisterBeat(this);
+    if (this.blockEl) {
+      const mesh = this.blockEl.getObject3D('mesh');
+      if (mesh) {
+        mesh.traverse(node => {
+          if (node.isMesh && node._origMaterial) {
+            node.material = node._origMaterial;
+          }
+        });
+      }
+    }
     this.el.object3D.position.set(0, 0, -9999);
     this.el.object3D.visible = false;
     this.el.sceneEl.components[this.poolName].returnEntity(this.el);

@@ -154,14 +154,6 @@ AFRAME.registerComponent('drums', {
         return;
       }
 
-      // Color check
-      const correctColor = bestBeat.data.color === expectedColor;
-      if (!correctColor) {
-        bestBeat.onHit(this.el, true);
-        bestBeat.destroyBeat(this.el, false);
-        return;
-      }
-
       // Valid rhythm drum hit!
       bestBeat.destroyBeat(this.el, true);
 
