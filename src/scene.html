@@ -359,7 +359,7 @@
             </a-entity>
           </a-entity>
 
-          <!-- Drumstick. -->
+          <!-- Drumstick (Sleek Slim Glowing Cyber-Sticks). -->
           <a-entity
             id="{{ hand }}Drumstick"
             class="drumstickEntity"
@@ -367,24 +367,46 @@
             bind__visible="isPlaying && gameMode === 'drum'"
             bind__position="has3DOFVR && '0 0 -0.5' || '0 0 0'"
             rotation="0 0 0">
-            <a-entity class="drumstickContainer" rotation="25 0 0" position="0 0.02 -0.05">
+            <a-entity class="drumstickContainer" rotation="-30 0 0" position="0 0.01 -0.04">
+              <!-- Slim Grip Handle -->
               <a-entity
-                geometry="primitive: cylinder; radius: 0.012; height: 0.12"
-                position="0 -0.04 0.06"
+                geometry="primitive: cylinder; radius: 0.0055; height: 0.10"
+                position="0 0 0.04"
                 rotation="90 0 0"
+                material="color: #1a1a24; roughness: 0.4; metalness: 0.8"></a-entity>
+              <!-- Neon Grip Accent Ring -->
+              <a-entity
+                geometry="primitive: torus; radius: 0.006; radiusTubular: 0.0015"
+                position="0 0 0.08"
                 bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
                 material="shader: flat"></a-entity>
+              <!-- Pommel Cap -->
               <a-entity
-                geometry="primitive: cylinder; radiusTop: 0.006; radiusBottom: 0.01; height: 0.28"
-                position="0 0.02 -0.12"
+                geometry="primitive: sphere; radius: 0.0065"
+                position="0 0 0.09"
+                bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
+                material="shader: flat"></a-entity>
+              <!-- Slender Glowing Neon Tapered Shaft -->
+              <a-entity
+                geometry="primitive: cylinder; radiusTop: 0.003; radiusBottom: 0.005; height: 0.26"
+                position="0 0 -0.14"
                 rotation="90 0 0"
-                material="color: #222230; roughness: 0.4; metalness: 0.8"></a-entity>
-              <a-entity
-                class="drumstickTip"
-                geometry="primitive: sphere; radius: 0.018"
-                position="0 0.02 -0.27"
                 bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
                 material="shader: flat; opacity: 0.95"></a-entity>
+              <!-- Outer Glow Aura Tube -->
+              <a-entity
+                geometry="primitive: cylinder; radiusTop: 0.0055; radiusBottom: 0.0075; height: 0.26"
+                position="0 0 -0.14"
+                rotation="90 0 0"
+                bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
+                material="shader: flat; opacity: 0.35; transparent: true"></a-entity>
+              <!-- Small Glowing Teardrop Tip -->
+              <a-entity
+                class="drumstickTip"
+                geometry="primitive: sphere; radius: 0.008"
+                position="0 0 -0.275"
+                bind__material="color: {{ hand === 'left' and 'colorPrimary' or 'colorSecondary' }}"
+                material="shader: flat; opacity: 1.0"></a-entity>
             </a-entity>
           </a-entity>
 
